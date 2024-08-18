@@ -6,39 +6,24 @@ import Scroll from '../components/Scroll';
 import ErrorBoundry from '../components/ErrorBoundry';
 
 function App() {
-    // Lifecycle : constructor is the first to run
-    // constructor(){
-    //     super();
-    //     this.state = {
-    //         robots: [],
-    //         searchfield: ''
-    //     }
-    // }
-
     const [robots, setRobots] = useState([])
     const [searchfield, setSearchfield] = useState('')
-    
-
-    // Lifecycle : componentDiMount is the third to run
-    // componentDidMount() {
-    //     fetch('https://jsonplaceholder.typicode.com/users')
-    //         .then(response => response.json())
-    //         .then(users => this.setState({ robots: users }));
-    // }
+    const [count, setCount] = useState(0);
 
     //It works like componentDidMount and componentDidUpdate
     useEffect(() => {
         fetch('https://jsonplaceholder.typicode.com/users')
             .then(response => response.json())
-            .then(users => setRobots(users));
-    })
+            .then(users => {setRobots(users)})
+        console.log(count)
+    }, [count]) // only run if count changes
 
     const onSearchChange = (event) => {
-        setSearchfield(event.target.value);
+        setSearchfield(event.target.value)
     }
 
     const filteredRobots = robots.filter(robot => {
-        return robot.name.toLowerCase().includes(searchfield.toLowerCase());
+        return robot.name.toLowerCase().includes(searchfield.toLowerCase())
     })
 
     return !robots.length ?
@@ -46,6 +31,7 @@ function App() {
         (
             <div className='tc'>
                 <h1 className='f1'>RoboFriends</h1>
+                <button onClick={() => setCount(count + 1)}>Click Me!</button>
                 <SearchBox searchChange={onSearchChange} />
                 <Scroll>
                     <ErrorBoundry>
